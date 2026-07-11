@@ -1,0 +1,24 @@
+{
+    "name": "ramsey/php-src-memory-error-bench",
+    "description": "Benchmarks for the Catchable Memory Error RFC",
+    "license": "MIT-0",
+    "require": {
+        "php": "^8.5",
+        "ext-gmp": "*",
+        "ext-openssl": "*",
+        "ext-pgsql": "*",
+        "ext-shmop": "*",
+        "ext-sockets": "*",
+        "ext-sodium": "*",
+        "ext-sysvmsg": "*",
+        "phpbench/phpbench": "^1.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Php\\Test\\MemoryError\\": "tests/"
+        }
+    },
+    "scripts": {
+        "bench": "phpbench run --report=aggregate"
+    }
+}

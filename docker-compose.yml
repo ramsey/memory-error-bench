@@ -1,0 +1,57 @@
+# Benchmark comparison workflow:
+#
+#   docker compose build                     # build both images (long: two full php-src compiles)
+#   docker compose run --rm php-baseline     # run benchmarks, store results under tag "baseline"
+#   docker compose run --rm php-memory-error # run benchmarks, report side-by-side vs. baseline
+#   docker compose down                      # stop the postgres service when finished
+#
+# Results are stored in ./.phpbench.
+# Re-running php-baseline refreshes the "baseline" tag; delete .phpbench/ to reset.
+
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: test
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d test"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
+
+  php-baseline:
+    image: memory-error-bench/php-baseline
+    build:
+      context: docker
+      args:
+        PHP_SRC_REPO: https://github.com/php/php-src.git
+        # Merge-base of ramsey/php-src:memory-error and php/php-src:master
+        PHP_SRC_REF: 9073875eb98416595f1666df0f6a728bab2bc5c7
+    network_mode: "service:postgres"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    command: ["vendor/bin/phpbench", "run", "--report=aggregate", "--tag=baseline"]
+
+  php-memory-error:
+    image: memory-error-bench/php-memory-error
+    build:
+      context: docker
+      args:
+        PHP_SRC_REPO: https://github.com/ramsey/php-src.git
+        # Branch ref: Docker's layer cache will NOT notice new commits on the
+        # branch; rebuild with --no-cache (or pin a SHA) to pick them up.
+        PHP_SRC_REF: memory-error
+    network_mode: "service:postgres"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    command: ["vendor/bin/phpbench", "run", "--report=aggregate", "--ref=baseline"]

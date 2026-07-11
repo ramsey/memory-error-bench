@@ -1,0 +1,53 @@
+#! /bin/sh
+#
+# Created by configure
+
+CFLAGS='-O2' \
+'./configure' \
+'--enable-bcmath' \
+'--enable-calendar' \
+'--enable-dba' \
+'--enable-exif' \
+'--enable-ftp' \
+'--enable-gd' \
+'--enable-gd-jis-conv' \
+'--enable-intl' \
+'--enable-mbstring' \
+'--enable-pcntl' \
+'--enable-shmop' \
+'--enable-soap' \
+'--enable-sockets' \
+'--enable-sysvmsg' \
+'--enable-sysvsem' \
+'--enable-sysvshm' \
+'--with-avif' \
+'--with-bz2' \
+'--with-curl' \
+'--with-enchant' \
+'--with-ffi' \
+'--with-freetype' \
+'--with-gettext' \
+'--with-gmp' \
+'--with-jpeg' \
+'--with-ldap' \
+'--with-ldap-sasl' \
+'--with-mysqli' \
+'--with-openssl' \
+'--with-openssl-argon2' \
+'--with-password-argon2' \
+'--with-pdo-dblib' \
+'--with-pdo-mysql' \
+'--with-pdo-odbc=unixODBC' \
+'--with-pdo-pgsql' \
+'--with-pgsql' \
+'--with-readline' \
+'--with-snmp' \
+'--with-sodium' \
+'--with-tidy' \
+'--with-unixODBC' \
+'--with-webp' \
+'--with-xpm' \
+'--with-xsl' \
+'--with-zip' \
+'--with-zlib' \
+"$@"
